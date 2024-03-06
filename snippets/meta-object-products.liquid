@@ -1,0 +1,458 @@
+{% liquid
+  assign active_material = false
+  assign inactive_materials = ''
+  for metaobject in product.metafields.custom.materials.value
+    assign active_products = metaobject.active_products.value
+    for active_product in active_products
+      if active_product.id == product.id
+        assign active_material = metaobject.title
+      else
+        assign inactive_materials = inactive_materials | append: metaobject.title | append: ', '
+      endif
+    endfor
+  endfor
+
+  assign active_stone_type = false
+  assign inactive_stone_type = ''
+
+  for metaobject in product.metafields.custom.stone_type.value
+    assign active_products = metaobject.active_products.value
+    for active_product in active_products
+      if active_product.id == product.id
+        assign active_stone_type = metaobject.title
+      else
+        assign inactive_stone_type = inactive_stone_type | append: metaobject.title | append: ', '
+      endif
+    endfor
+  endfor
+
+  assign active_gemstone_type = false
+  assign inactive_gemstone_type = ''
+  for metaobject in product.metafields.custom.gemstone_type.value
+    assign active_products = metaobject.active_products.value
+
+    for active_product in active_products
+      if active_product.id == product.id
+        assign active_gemstone_type = metaobject.title
+      else
+        assign inactive_gemstone_type = inactive_gemstone_type | append: metaobject.title | append: ', '
+      endif
+    endfor
+  endfor
+
+  assign active_diamond_size = false
+  assign inactive_diamond_sizes = ''
+
+  for metaobject in product.metafields.custom.diamond_sizes.value
+    assign active_products = metaobject.active_products.value
+
+    for active_product in active_products
+      if active_product.id == product.id
+        assign active_diamond_size = metaobject.title
+      else
+        assign inactive_diamond_sizes = inactive_diamond_sizes | append: metaobject.title | append: ', '
+      endif
+    endfor
+  endfor
+
+  echo '<script id="ProductMetaObjects" type="application/json"> {'
+  for _product in product.metafields.custom.related_products_options.value
+    assign materials = _product.metafields.custom.materials.value
+    assign stone_types = _product.metafields.custom.stone_type.value
+    assign gemstone_types = _product.metafields.custom.gemstone_type.value
+    assign diamond_sizes = _product.metafields.custom.diamond_sizes.value
+
+    assign all_materials_title = ''
+    assign all_stone_types_title = ''
+    assign all_gemstone_types_title = ''
+    assign all_diamond_sizes_title = ''
+    assign active_materials_title = ''
+    assign active_stone_types_title = ''
+    assign active_gemstone_types_title = ''
+    assign active_diamond_sizes_title = ''
+
+    # Condition 1: this condition means that the attached stone type has this product(_product) as active in the active products list
+    assign condition_1 = false
+
+    for material in materials
+      assign active_products = material.active_products.value
+      assign all_materials_title = all_materials_title | append: material.title | append: ', '
+
+      for active_product in active_products
+        if active_product.id == _product.id
+          # assign condition_1 = true
+
+          assign active_materials_title = active_materials_title | append: material.title | append: ', '
+          assign material_title_with_link = material.title | append: '#' | append: _product.url
+          assign inactive_materials = inactive_materials | replace: material.title, material_title_with_link
+        endif
+      endfor
+    endfor
+
+    for stone_type in stone_types
+      assign active_products = stone_type.active_products.value
+      assign all_stone_types_title = all_stone_types_title | append: stone_type.title | append: ', '
+      for active_product in active_products
+        if active_product.id == _product.id
+          assign condition_1 = true
+
+          assign active_stone_types_title = active_stone_types_title | append: stone_type.title | append: ', '
+          assign stone_type_title_with_link = stone_type.title | append: '#' | append: _product.url
+          assign inactive_stone_type = inactive_stone_type | replace: stone_type.title, stone_type_title_with_link
+        endif
+      endfor
+    endfor
+
+    for gemstone_type in gemstone_types
+      assign active_products = gemstone_type.active_products.value
+      assign all_gemstone_types_title = all_gemstone_types_title | append: gemstone_type.title | append: ', '
+      for active_product in active_products
+        if active_product.id == _product.id
+          assign active_gemstone_types_title = active_gemstone_types_title | append: gemstone_type.title | append: ', '
+          assign gemstone_type_title_with_link = gemstone_type.title | append: '#' | append: _product.url
+          assign inactive_gemstone_type = inactive_gemstone_type | replace: gemstone_type.title, gemstone_type_title_with_link
+        endif
+      endfor
+    endfor
+
+    for diamond_size in diamond_sizes
+      assign active_products = diamond_size.active_products.value
+      assign all_diamond_sizes_title = all_diamond_sizes_title | append: diamond_size.title | append: ', '
+      for active_product in active_products
+        if active_product.id == _product.id
+          assign active_diamond_sizes_title = active_diamond_sizes_title | append: diamond_size.title | append: ', '
+          assign diamond_sizes_title_with_link = diamond_size.title | append: '#' | append: _product.url
+          assign inactive_diamond_sizes = inactive_diamond_sizes | replace: diamond_sizes.title, diamond_sizes_title_with_link
+        endif
+      endfor
+    endfor
+
+    assign ending_comma = ','
+    if forloop.last
+      assign ending_comma = ''
+    endif
+
+    echo '"' | append: _product.handle | append: '"' | append: ':{ '
+    assign product_price = _product.price | money
+    echo '"price":"' | append: product_price | append: '",'
+    echo '"materials":' | append: '{' | append: '"all":' | append: '"' | append: all_materials_title | append: '",' | append: '"active":' | append: '"' | append: active_materials_title | append: '"},'
+    echo '"stone_type":' | append: '{' | append: '"all":' | append: '"' | append: all_stone_types_title | append: '",' | append: '"active":' | append: '"' | append: active_stone_types_title | append: '"},'
+    echo '"gemstone_types":' | append: '{' | append: '"all":' | append: '"' | append: all_gemstone_types_title | append: '",' | append: '"active":' | append: '"' | append: active_gemstone_types_title | append: '"},'
+    echo '"diamond_sizes":' | append: '{' | append: '"all":' | append: '"' | append: all_diamond_sizes_title | append: '",' | append: '"active":' | append: '"' | append: active_diamond_sizes_title | append: '"}'
+
+    echo '}' | append: ending_comma
+  endfor
+
+  echo '}</script>'
+%}
+
+{% if product.metafields.custom.materials != blank %}
+  <div class="metaobject--parent" data-metaobject="materials">
+    <p class="option--title">{{ block.settings.option_title }}</p>
+    <div class="swiper-buttons--wrapper">
+      <div class="materials-swiper-button-next">{% render 'icon-next' %}</div>
+      <div class="materials-swiper-button-prev">{% render 'icon-next' %}</div>
+    </div>
+    <div class="metaobject-flex--container">
+      <div class="swiper materials--slider">
+        <div class="swiper-wrapper">
+          {% for metaobject in product.metafields.custom.materials.value %}
+            {% liquid
+              assign active_products = metaobject.active_products.value
+              assign is_active = false
+
+              for active_product in active_products
+                if active_product.id == product.id
+                  assign is_active = true
+                endif
+              endfor
+            %}
+
+            <div class="swiper-slide {% if is_active %}selected--product{% endif %}">
+              <div class="metaobject--container" data-title="{{metaobject.title}}">
+                <div class="image--wrapper">
+                  <img src="{{ metaobject.image | img_url : 'master' }}">
+                </div>
+                <p class="metaobject-title">{{ metaobject.title }}</p>
+                <span class="metaobject--price">
+                  {% if is_active %}
+                    {{- product.price | money_without_trailing_zeros -}}
+                  {% else %}
+                    {{- metaobject.price | times: 100.0 | money_without_trailing_zeros -}}
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% if product.metafields.custom.stone_type != blank %}
+  <div class="metaobject--parent" data-metaobject="stone-type">
+    <p class="option--title">{{ block.settings.option_title2 }}</p>
+    <div class="metaobject-flex--container">
+      <div class="swiper-buttons--wrapper">
+        <div class="stone_type-swiper-button-next">{% render 'icon-next' %}</div>
+        <div class="stone_type-swiper-button-prev">{% render 'icon-next' %}</div>
+      </div>
+      <div class="swiper stone_type--slider">
+        <div class="swiper-wrapper">
+          {% for metaobject in product.metafields.custom.stone_type.value %}
+            {% liquid
+              assign active_products = metaobject.active_products.value
+              assign is_active = false
+
+              for active_product in active_products
+                if active_product.id == product.id
+                  assign is_active = true
+                endif
+              endfor
+            %}
+            <div class="swiper-slide {% if is_active %}selected--product{% endif %}">
+              <div class="metaobject--container" data-title="{{metaobject.title}}">
+                <div class="image--wrapper" style=" {% if metaobject.image == blank %} opacity: 0; {% endif %} ">
+                  <img src="{{ metaobject.image | img_url : 'master' }}">
+                </div>
+                <p class="metaobject-title">{{ metaobject.title }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% if product.metafields.custom.gemstone_type != blank and block.settings.gemstone_type %}
+  {% comment %}
+    <div class="metaobject--parent">
+      <p class="option--title">{{ block.settings.option_title4 }}</p>
+      <div class="swiper-buttons--wrapper">
+        <div class="gemstone_type-swiper-button-next">{% render 'icon-next' %}</div>
+        <div class="gemstone_type-swiper-button-prev">{% render 'icon-next' %}</div>
+      </div>
+      <div class="metaobject-flex--container">
+        <div class="swiper gemstone_type--slider">
+          <div class="swiper-wrapper">
+            {% for metaobject in product.metafields.custom.gemstone_type.value %}
+              {% liquid
+                assign active_products = metaobject.active_products.value
+                assign is_active = false
+
+                for active_product in active_products
+                  if active_product.id == product.id
+                    assign is_active = true
+                  endif
+                endfor
+              %}
+              <div class="swiper-slide {% if is_active %}selected--product{% endif %}">
+                <div class="metaobject--container" data-title="{{metaobject.title}}">
+                  <div class="image--wrapper">
+                    <img src="{{ metaobject.image | img_url : 'master' }}">
+                  </div>
+                  <p class="metaobject-title">{{ metaobject.title }}</p>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endcomment %}
+  <div class="metaobject--parent" data-metaobject="gemstone-type">
+    <p class="option--title">{{ block.settings.option_title3 }}</p>
+
+    <div class="metaobject-flex--container">
+      <div class="gemstone_type--grid">
+        {% for metaobject in product.metafields.custom.gemstone_type.value %}
+          {% liquid
+            assign active_products = metaobject.active_products.value
+            assign is_active = false
+
+            for active_product in active_products
+              if active_product.id == product.id
+                assign is_active = true
+              endif
+            endfor
+          %}
+          <div
+            class="metaobject--container gemstone_type__item {% if is_active %}selected--product{% endif %}"
+            data-title="{{metaobject.title}}"
+          >
+            <div class="image--wrapper">
+              <img src="{{ metaobject.image | img_url : 'master' }}">
+            </div>
+            <p class="metaobject-title">{{ metaobject.title }}</p>
+          </div>
+          {% comment %}
+            <div class="swiper-slide ">
+            </div>
+          {% endcomment %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% if product.metafields.custom.diamond_sizes != blank %}
+  <div class="metaobject--parent" data-metaobject="diamond-size">
+    <p class="option--title">{{ block.settings.option_title4 }}</p>
+    <div class="swiper-buttons--wrapper">
+      <div class="diamond_sizes-swiper-button-next">{% render 'icon-next' %}</div>
+      <div class="diamond_sizes-swiper-button-prev">{% render 'icon-next' %}</div>
+    </div>
+    <div class="metaobject-flex--container">
+      <div class="swiper diamond_sizes-slider">
+        <div class="swiper-wrapper">
+          {% for metaobject in product.metafields.custom.diamond_sizes.value %}
+            {% liquid
+              assign active_products = metaobject.active_products.value
+              assign is_active = false
+
+              for active_product in active_products
+                if active_product.id == product.id
+                  assign is_active = true
+                endif
+              endfor
+            %}
+            <div class="swiper-slide {% if is_active %}selected--product{% endif %}">
+              <div class="metaobject--container" data-title="{{metaobject.title}}">
+                <div class="image--wrapper">
+                  <img src="{{ metaobject.image | img_url : 'master' }}">
+                </div>
+                <p class="metaobject-title">{{ metaobject.title }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<!-- Initialize Swiper -->
+<script>
+  try {
+    const ProductMetaObjects = JSON.parse(document.querySelector('#ProductMetaObjects').innerHTML);
+    const productHandle = window.theme.routes.productHandle;
+
+    const activeMaterial = ProductMetaObjects[productHandle].materials.active;
+    const activeStoneType = ProductMetaObjects[productHandle].stone_type.active;
+    const activeGemstoneType = ProductMetaObjects[productHandle].gemstone_types.active;
+    const activeDiamondSize = ProductMetaObjects[productHandle].diamond_sizes.active;
+
+    const inactiveMaterials = ProductMetaObjects[productHandle].materials.all.replace(
+      ProductMetaObjects[productHandle].materials.active,
+      ''
+    );
+    const inactiveStoneTypes = ProductMetaObjects[productHandle].stone_type.all.replace(
+      ProductMetaObjects[productHandle].stone_type.active,
+      ''
+    );
+    const inactiveGemstoneTypes = ProductMetaObjects[productHandle].gemstone_types.all.replace(
+      ProductMetaObjects[productHandle].gemstone_types.active,
+      ''
+    );
+    const inactiveDiamondSizes = ProductMetaObjects[productHandle].diamond_sizes.all.replace(
+      ProductMetaObjects[productHandle].diamond_sizes.active,
+      ''
+    );
+
+    const allMaterials = ProductMetaObjects[productHandle].materials.all;
+    const allStoneTypes = ProductMetaObjects[productHandle].stone_type.all;
+    const allGemstoneTypes = ProductMetaObjects[productHandle].gemstone_types.all;
+    const allDiamondSizes = ProductMetaObjects[productHandle].diamond_sizes.all;
+
+    const finalLinks = {
+      material: {},
+      stone_type: {},
+      gemstone_type: {},
+      diamond_size: {},
+    };
+
+    for (const inactiveMaterial of inactiveMaterials.split(', ')) {
+      if (inactiveMaterial != '') finalLinks.material[inactiveMaterial] = '';
+    }
+
+    for (const inactiveStoneType of inactiveStoneTypes.split(', ')) {
+      if (inactiveStoneType != '') finalLinks.stone_type[inactiveStoneType] = '';
+    }
+
+    for (const inactiveGemstoneType of inactiveGemstoneTypes.split(', ')) {
+      if (inactiveGemstoneType != '') finalLinks.gemstone_type[inactiveGemstoneType] = '';
+    }
+
+    for (const inactiveDiamondSize of inactiveDiamondSizes.split(', ')) {
+      if (inactiveDiamondSize != '') finalLinks.diamond_size[inactiveDiamondSize] = '';
+    }
+
+    for (const productHandle of Object.keys(ProductMetaObjects)) {
+      if (productHandle != window.theme.routes.productHandle) {
+        const productMaterials = ProductMetaObjects[productHandle].materials;
+        const productStoneTypes = ProductMetaObjects[productHandle].stone_type;
+        const productGemstoneTypes = ProductMetaObjects[productHandle].gemstone_types;
+        const productDiamondSizes = ProductMetaObjects[productHandle].diamond_sizes;
+
+        // Finding Inactive Material Links
+        for (const inactiveMaterial of Object.keys(finalLinks.material)) {
+          if (
+            productMaterials.active.includes(inactiveMaterial) &&
+            productStoneTypes.active.includes(activeStoneType) &&
+            productGemstoneTypes.active.includes(activeGemstoneType) &&
+            productDiamondSizes.active.includes(activeDiamondSize)
+          ) {
+            finalLinks.material[inactiveMaterial] = productHandle;
+          }
+        }
+
+        // Finding Inactive Stone Type Links
+        for (const inactiveStoneType of Object.keys(finalLinks.stone_type)) {
+          if (
+            productMaterials.active.includes(activeMaterial) &&
+            productStoneTypes.active.includes(inactiveStoneType) &&
+            productGemstoneTypes.active.includes(activeGemstoneType) &&
+            productDiamondSizes.active.includes(activeDiamondSize)
+          ) {
+            finalLinks.stone_type[inactiveStoneType] = productHandle;
+          }
+        }
+
+        // Finding Inactive Stone Type Links
+        for (const inactiveGemStoneType of Object.keys(finalLinks.gemstone_type)) {
+          if (
+            productMaterials.active.includes(activeMaterial) &&
+            productStoneTypes.active.includes(activeStoneType) &&
+            productGemstoneTypes.active.includes(inactiveGemStoneType) &&
+            productDiamondSizes.active.includes(activeDiamondSize)
+          ) {
+            finalLinks.stone_type[inactiveGemStoneType] = productHandle;
+          }
+        }
+      }
+    }
+
+    // adding material links
+    for (const mat of Object.keys(finalLinks.material)) {
+      if (finalLinks.material[mat]) {
+        document.querySelector(`.metaobject--container[data-title='${mat}'] .metaobject--price`).innerText =
+          ProductMetaObjects[finalLinks.material[mat]].price;
+      }
+
+      document.querySelector(`.metaobject--container[data-title='${mat}']`).addEventListener('click', () => {
+        if (finalLinks.material[mat] != '') window.location.href = finalLinks.material[mat];
+      });
+    }
+
+    // adding material links
+    for (const mat of Object.keys(finalLinks.stone_type)) {
+      document.querySelector(`.metaobject--container[data-title='${mat}']`).addEventListener('click', () => {
+        if (finalLinks.stone_type[mat] != '') window.location.href = finalLinks.stone_type[mat];
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+</script>

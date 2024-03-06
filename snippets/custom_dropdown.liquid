@@ -1,0 +1,385 @@
+<script src="{{ 'custom-select.js' | asset_url }}" defer></script>
+
+{% liquid
+  assign languages = ''
+  for language in product.metafields.custom.languages.value
+    assign languages = languages | append: language | append: ','
+  endfor
+  if languages == ''
+    assign languages = 'English,'
+  endif
+  # assign languages = 'English,Urdu,Chinese,Japanese,Korean,Russian,Arabic'
+  assign languages = languages | split: ','
+
+  assign input_id = 'Choose Language' | handle | prepend: 'personalization_'
+  assign input_name = 'Choose Language' | handle | prepend: 'personalization[' | append: ']'
+
+  assign personalization_option = product.metafields.custom.product_personalization_options | handleize
+  assign custom_field_label = product.metafields.custom.personalization_label
+-%}
+
+<div
+  class="option-selector {{languages | size}} {% if languages.size == 1 %} hidden {% endif %} "
+  data-line-item-name="Language"
+  data-selector-type="dropdown"
+>
+  {% render 'custom-select-2',
+    id: input_id,
+    label: 'Choose Language',
+    option_values: languages,
+    selected_value: languages.first,
+    include_native: true,
+    native_name: input_name,
+    block: block
+  %}
+</div>
+
+{% capture intials_dropdown %}
+    {% liquid
+      assign alphabets = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z"
+    
+      assign field_label = 'Choose your Initials:'
+      assign field_label = "[[FieldLabel]]"
+
+      assign input_id = field_label | handle | prepend: 'personalization_'
+      assign input_name = field_label | handle | prepend: 'personalization[' | append: ']'
+
+      case languages.first 
+        when "English" 
+          assign alphabets = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z"
+        when "Urdu" 
+          assign alphabets =  "ا,ب,پ,ت,ٹ,ث,ج,چ,ح,خ,د,ڈ,ذ,ر,ڑ,ز,ژ,س,ش,ص,ض,ط,ظ,ع,غ,ف,ق,ک,گ,ل,م,ن,و,ہ,ھ,ء,ی,ے"
+        when "Chinese" 
+          assign alphabets = "诶,比,西,迪,伊,艾弗,吉,艾尺,艾,杰,开,艾勒,艾马,艾娜,哦,屁,吉吾,艾儿,艾丝,提,伊吾,维,豆贝尔维,艾克斯,吾艾,贼德"
+        when "Japanese" 
+          assign alphabets = "あ,い,う,え,お,か,き,く,け,こ,さ,し,す,せ,そ,た,ち,つ,て,と,な,に,ぬ,ね,の,は,ひ,ふ,へ,ほ,ま,み,む,め,も,や,ゆ,よ,ら,り,る,れ,ろ,わ,を,ん"
+        when "Katakana" 
+          assign alphabets = "ア,イ,ウ,エ,オ,カ,キ,ク,ケ,コ,サ,シ,ス,セ,ソ,タ,チ,ツ,テ,ト,ナ,ニ,ヌ,ネ,ノ,ハ,ヒ,フ,ヘ,ホ,マ,ミ,ム,メ,モ,ヤ,ユ,ヨ,ラ,リ,ル,レ,ロ,ワ,ヲ,ン"
+        when "Korean" 
+          assign alphabets = "가,나,다,라,마,바,사,아,자,차,카,타,파,하"
+        when "Russian" 
+          assign alphabets = "А,Б,В,Г,Д,Е,Ё,Ж,З,И,Й,К,Л,М,Н,О,П,Р,С,Т,У,Ф,Х,Ц,Ч,Ш,Щ,Ъ,Ы,Ь,Э,Ю,Я"
+        when "Arabic"
+          assign alphabets =  "ا,ب,ت,ث,ج,ح,خ,د,ذ,ر,ز,س,ش,ص,ض,ط,ظ,ع,غ,ف,ق,ك,ل,م,ن,هـ,و,ي"
+        when "Bengali"
+          assign alphabets = "ক,খ,গ,ঘ,ঙ,চ,ছ,জ,ঝ,ঞ,ট,ঠ,ড,ঢ,ণ,ত,থ,দ,ধ,ন,প,ফ,ব,ভ,ম,য,র,ল,শ,ষ,স,হ,য়,ড়,ঢ়"
+        when "Hindi"
+          assign alphabets = "अ,आ,ए,ई,ऍ,ऎ,ऐ,इ,ओ,ऑ,ऒ,ऊ,औ,उ,ब,भ,च,छ,ड,ढ,फ,फ़,ग,घ,ग़,ह,ज,झ,क,ख,ख़,ल,ळ,ऌ,ऴ,ॡ,म,न,ङ,ञ,ण,ऩ,ॐ,प,क़,र,ऋ,ॠ,ऱ,स,श,ष,ट,त,ठ,द,थ,ध,ड़,ढ़,व,य,य़,ज़"
+        when "Gujarati"
+          assign alphabets = "અ,આ,ઇ,ઈ,ઉ,ઊ,ઋ,એ,ઐ,ઓ,ઔ,ઍ,ઑ,ા,િ,ી,ુ,ૂ,ૃ,ે,ૈ,ો,ૌ,ૅ,ૉ,ક,ચ,ટ,ત,પ,ખ,છ,ઠ,થ,ફ,ગ,જ,ડ,દ,બ,ઘ,ઝ,ઢ,ધ,ભ,ઙ,ઞ,ણ,ન,મ,ય,ર,લ,વ,શ,ષ,સ,હ,ળ,ં"
+        when "Punjabi"
+          assign alphabets = "ਓ,ਅ,ੲ,ਸ,ਹ,ਕ,ਖ,ਗ,ਘ,ਙ,ਚ,ਛ,ਜ,ਝ,ਞ,ਟ,ਠ,ਡ,ਢ,ਣ,ਤ,ਥ,ਦ,ਧ,ਨ,ਪ,ਫ,ਬ,ਭ,ਮ,ਯ,ਰ,ਲ,ਵ,ੜ,ਸ਼,ਖ਼,ਗ਼,ਜ਼,ਫ਼,ਲ਼"
+          
+      endcase 
+      
+      assign custom_options = alphabets | split: ','
+    -%}
+    <div class="option-selector" data-line-item-name="{{field_label}}" data-dropdown-type="initials" data-selector-type="dropdown">
+      {% render 'custom-select-2',
+        id: input_id,
+        label: field_label,
+        option_values: custom_options,
+        selected_value: custom_options.first,
+        include_native: true,
+        native_name: input_name,
+        button_text: 'Font Guide',
+        model_id: 'modal-personalization_choose-your-initials',
+        size_guide: true
+      %}
+    </div>
+{% endcapture %}
+
+{% capture ring_size_dropdown %}
+
+    {% liquid
+        assign sizes = '5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,10.5'
+
+        assign field_label = 'Select your ring size:'
+        assign field_label = "[[FieldLabel]]"
+
+        assign custom_options = sizes | split: ','
+        assign input_id = field_label | handle | prepend: 'personalization_'
+        assign input_name = field_label | handle | prepend: 'personalization[' | append: ']'
+    -%}
+    <div class="option-selector" data-line-item-name="{{field_label}}" data-dropdown-type="ring-size" data-selector-type="dropdown">
+        {% render 'custom-select-2',
+        id: input_id,
+        label: field_label,
+        option_values: custom_options,
+        selected_value: custom_options.first,
+        include_native: true,
+        native_name: input_name,
+        button_text: 'Size Guide',
+        model_id: 'modal-personalization_ring-size',
+        size_guide: true
+        %}
+    </div>
+{% endcapture %}
+
+{%- capture meta_object -%}
+    {% for metaobject in product.metafields.custom.gemstone_type.value %}
+        {% liquid
+        assign active_products = metaobject.active_products.value
+        assign is_active = false
+
+        for active_product in active_products
+            if active_product.id == product.id
+            assign is_active = true
+            endif
+        endfor
+        %}
+        <div class="metaobject--container gemstone_type__item {% if is_active %}selected--product{% endif %}" data-title="{{metaobject.title}}">
+            <div class="image--wrapper">
+                <img src="{{ metaobject.image | img_url : 'master' }}">
+            </div>
+            <p class="metaobject-title">{{ metaobject.title }}</p>
+        </div> New Item
+    {% endfor %}
+{%- endcapture -%}
+
+{%- capture meta_object_texts -%}
+  {%- liquid
+    for metaobject in product.metafields.custom.gemstone_type.value 
+      echo metaobject.title | append: ","
+    endfor 
+  -%}
+{%- endcapture -%}
+
+{% capture gemstone_dropdown %}
+
+  {% if product.metafields.custom.gemstone_type.value != blank %}
+    {%- liquid
+      assign field_label = 'Select gemstone type:'
+      assign field_label = "[[FieldLabel]]"
+  
+      assign custom_options = meta_object | split: 'New Item'
+      assign custom_options_text = meta_object_texts | split: ','
+      assign input_id = field_label | handle | prepend: 'personalization_'
+      assign input_name = field_label | handle | prepend: 'personalization[' | append: ']'
+    -%}
+    <div class="option-selector meta-gemstone_selector" data-line-item-name="{{field_label}}" data-dropdown-type="gemstone" data-selector-type="dropdown">
+      {% render 'gemstone-type-select',
+        id: input_id,
+        label: field_label,
+        option_values: custom_options,
+        option_texts: custom_options_text,
+        selected_value: custom_options.first,
+        include_native: true,
+        native_name: input_name,
+        button_text: 'Size Guide',
+        model_id: 'modal-personalization_chain-length',
+        size_guide: false
+      %}
+    </div>
+    
+  {% endif %}
+{% endcapture %}
+
+{% capture name_preview_input %}
+  {% liquid
+    assign field_label = "Write up to 10 characters:"
+    assign field_label = "[[FieldLabel]]"
+    assign line_item_label = "[[LineItemLabel]]"
+
+    assign name_preview_max_length = 9
+    if product.metafields.font.max_length.value != blank
+      assign name_preview_max_length = product.metafields.font.max_length.value
+    endif
+
+    assign name_preview_color = section.settings.custom_font_color
+    if name_preview_color == blank
+      assign name_preview_color = '#edc300'
+    endif
+    
+    assign name_preview_font_family = product.metafields.font.font_family.value
+    assign name_preview_font_size = 24
+  %}
+
+  <div class="custom-name-box-wrapper" data-dropdown-type="name">
+    <label>
+      <p>{{ field_label }}</p>
+      <div
+        class="lightly-spaced-row{% unless block.settings.show_in_quickbuy %} not-in-quickbuy{% endunless %}"
+        {{ block.shopify_attributes }}
+      >
+        <modal-opener class="no-js-hidden" data-modal="{{ 'incription_guide' }}">
+          <button
+            type="button"
+            class="{% if block.settings.style != 'link' %}btn btn--{{ block.settings.style }}{% else %}small-feature-link{% endif %}"
+            aria-haspopup="dialog"
+          >
+            {{- 'Inscription guide' -}}
+          </button>
+        </modal-opener>
+      </div>
+    </label>
+    <name-preview data-line-item-name="{{line_item_label}}">
+      <div class="name-input">
+        <input
+          type="text"
+          name="Custom Name"
+          maxlength="{{ name_preview_max_length }}"
+        >
+        <span class="name-length"></span>
+      </div>
+      <div
+        class="name-preview"
+        style="font-family:'{{name_preview_font_family}}'; font-size:{{name_preview_font_size}}px; color:{{name_preview_color}};"
+      ></div>
+    </name-preview>
+  </div>
+{% endcapture %}
+
+{% liquid
+  assign initials_field_label = 'Choose your Initials: '
+  assign initials_field_label_handleize = initials_field_label | handleize
+
+  assign gemstone_field_label = 'Choose your Gemstone: '
+  assign gemstone_field_label_handleize = gemstone_field_label | handleize
+
+  assign ringsize_field_label = 'Choose Your Ring Size: '
+  assign ringsize_field_label_handleize = ringsize_field_label | handleize
+
+  assign name_field_label = 'First Name: '
+  assign name_field_label_handleize = name_field_label | handleize
+
+  if personalization_option == 'single-initial'
+    assign initials_field_label = 'Initial:'
+    assign initials_field_label_handleize = initials_field_label | handleize
+    echo intials_dropdown | replace: '[[FieldLabel]]', initials_field_label | replace: 'fieldlabel', initials_field_label_handleize
+
+  elsif personalization_option == 'single-initial-single-gemstone'
+    assign initials_field_label = 'Initial:'
+    assign initials_field_label_handleize = initials_field_label | handleize
+    echo intials_dropdown | replace: '[[FieldLabel]]', initials_field_label | replace: 'fieldlabel', initials_field_label_handleize
+    echo gemstone_dropdown | replace: '[[FieldLabel]]', gemstone_field_label | replace: 'fieldlabel', gemstone_field_label_handleize
+
+  elsif personalization_option == 'single-initial-multiple-gemstone'
+    assign initials_field_label = 'Initial:'
+    assign initials_field_label_handleize = initials_field_label | handleize
+    echo intials_dropdown | replace: '[[FieldLabel]]', initials_field_label | replace: 'fieldlabel', initials_field_label_handleize
+    echo gemstone_dropdown | replace: '[[FieldLabel]]', gemstone_field_label | replace: 'fieldlabel', gemstone_field_label_handleize
+
+  elsif personalization_option == 'multiple-initials-multiple-gemstones'
+    assign gemstone_field_label = 'First Gemstone:'
+    assign gemstone_field_label_handleize = gemstone_field_label | handleize
+    assign initials_field_label = 'First Tag:'
+    assign initials_field_label_handleize = initials_field_label | handleize
+
+    echo intials_dropdown | replace: '[[FieldLabel]]', initials_field_label | replace: 'fieldlabel', initials_field_label_handleize
+    echo gemstone_dropdown | replace: '[[FieldLabel]]', gemstone_field_label | replace: 'fieldlabel', gemstone_field_label_handleize
+
+  elsif personalization_option == 'multiple-initials-single-gemstone'
+    assign initials_field_label = 'First Initial:'
+    assign initials_field_label_handleize = initials_field_label | handleize
+
+    echo intials_dropdown | replace: '[[FieldLabel]]', initials_field_label | replace: 'fieldlabel', initials_field_label_handleize
+
+  elsif personalization_option == 'multiple-initials-no-stones'
+    assign initials_field_label = 'First Initial:'
+    assign initials_field_label_handleize = initials_field_label | handleize
+
+    if product.metafields.custom.personalized_labels != blank
+      assign initials_field_label = product.metafields.custom.personalized_labels.value | first
+      assign initials_field_label_handleize = product.metafields.custom.personalized_labels.value | first | handleize
+    endif
+
+    echo intials_dropdown | replace: '[[FieldLabel]]', initials_field_label | replace: 'fieldlabel', initials_field_label_handleize
+
+  elsif personalization_option == 'single-initial-single-size'
+    assign initials_field_label = 'Initial:'
+    assign initials_field_label_handleize = initials_field_label | handleize
+    assign ringsize_field_label = 'Ring Size:'
+    assign ringsize_field_label_handleize = initials_field_label | handleize
+    echo intials_dropdown | replace: '[[FieldLabel]]', initials_field_label | replace: 'fieldlabel', initials_field_label_handleize
+    echo ring_size_dropdown | replace: '[[FieldLabel]]', ringsize_field_label | replace: 'fieldlabel', ringsize_field_label_handleize
+
+  elsif personalization_option == 'multiple-initials-multiple-sizes'
+    assign initials_field_label = 'First Initial: '
+    assign initials_field_label_handleize = initials_field_label | handleize
+
+    assign ringsize_field_label = 'First Ring Size: '
+    assign ringsize_field_label_handleize = gemstone_field_label | handleize
+
+    echo intials_dropdown | replace: '[[FieldLabel]]', initials_field_label | replace: 'fieldlabel', initials_field_label_handleize
+    echo ring_size_dropdown | replace: '[[FieldLabel]]', ringsize_field_label | replace: 'fieldlabel', ringsize_field_label_handleize
+
+  elsif personalization_option == 'single-name-single-gemstone'
+    assign name_field_label = 'Write Your Name: '
+    assign name_field_label_handleize = name_field_label | handleize
+
+    echo gemstone_dropdown | replace: '[[FieldLabel]]', gemstone_field_label | replace: 'fieldlabel', gemstone_field_label_handleize
+    echo name_preview_input | replace: '[[FieldLabel]]', name_field_label | replace: '[[LineItemLabel]]', 'Your Name'
+
+  elsif personalization_option == 'single-name'
+    assign name_field_label = 'Name: '
+    echo name_preview_input | replace: '[[FieldLabel]]', name_field_label | replace: '[[LineItemLabel]]', 'Name'
+
+  elsif personalization_option == 'multiple-name-no-stones'
+    assign line_item_label = 'First Name'
+    assign name_field_label = 'First ' | append: custom_field_label
+    assign line_item_label = 'First ' | append: custom_field_label
+
+    if product.metafields.custom.personalized_labels != blank
+      assign name_field_label = product.metafields.custom.personalized_labels.value | first
+      assign line_item_label = product.metafields.custom.personalized_labels.value | first
+    endif
+
+    echo name_preview_input | replace: '[[FieldLabel]]', name_field_label | replace: '[[LineItemLabel]]', line_item_label
+
+  elsif personalization_option == 'multiple-name-single-gemstone'
+    assign line_item_label = 'First Name'
+    assign name_field_label = 'First ' | append: custom_field_label
+    assign line_item_label = 'First ' | append: custom_field_label
+
+    if product.metafields.custom.personalized_labels != blank
+      assign name_field_label = product.metafields.custom.personalized_labels.value | first
+      assign line_item_label = product.metafields.custom.personalized_labels.value | first
+    endif
+
+    echo gemstone_dropdown | replace: '[[FieldLabel]]', gemstone_field_label | replace: 'fieldlabel', gemstone_field_label_handleize
+    echo name_preview_input | replace: '[[FieldLabel]]', name_field_label | replace: '[[LineItemLabel]]', line_item_label
+
+  elsif personalization_option == 'multiple-name-multiple-gemstone'
+    assign line_item_label = 'First Name'
+    assign name_field_label = 'First ' | append: custom_field_label
+    assign line_item_label = 'First ' | append: custom_field_label
+
+    if product.metafields.custom.personalized_labels != blank
+      assign name_field_label = product.metafields.custom.personalized_labels.value | first
+      assign line_item_label = product.metafields.custom.personalized_labels.value | first
+    endif
+
+    echo name_preview_input | replace: '[[FieldLabel]]', name_field_label | replace: '[[LineItemLabel]]', line_item_label
+    echo gemstone_dropdown | replace: '[[FieldLabel]]', 'First Gemstone: ' | replace: 'fieldlabel', 'first-gemstone'
+
+  elsif personalization_option == 'two-names-field(left & right)'
+    echo name_preview_input | replace: '[[FieldLabel]]', 'Left Name' | replace: '[[LineItemLabel]]', 'Left Name'
+    echo name_preview_input | replace: '[[FieldLabel]]', 'Right Name' | replace: '[[LineItemLabel]]', 'Right Name'
+
+  elsif personalization_option == 'two-names-two-gemstones'
+    echo name_preview_input | replace: '[[FieldLabel]]', name_field_label | replace: '[[LineItemLabel]]', 'First Name'
+    echo gemstone_dropdown | replace: '[[FieldLabel]]', gemstone_field_label | replace: 'fieldlabel', gemstone_field_label_handleize
+
+    echo name_preview_input | replace: '[[FieldLabel]]', 'Second Name' | replace: '[[LineItemLabel]]', 'Second Name'
+    echo gemstone_dropdown | replace: '[[FieldLabel]]', 'Second Gemstone: ' | replace: 'fieldlabel', 'second-gemstone'
+  endif
+%}
+
+<div inejcted-fields-placeholder></div>
+
+<template-name-preview>
+  {{ name_preview_input }}
+</template-name-preview>
+
+<template-ring-size>
+  {{ ring_size_dropdown }}
+</template-ring-size>
+
+<template-gemstone-type>
+  {{ gemstone_dropdown }}
+</template-gemstone-type>
+
+<template-initials>
+  {{ intials_dropdown }}
+</template-initials>

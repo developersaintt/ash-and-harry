@@ -1,0 +1,149 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_tax_and_shipping": false,
+            "enable_product_reviews_by_price": true
+          }
+        },
+        "vendor": {
+          "type": "vendor",
+          "settings": {
+          }
+        },
+        "divider": {
+          "type": "divider",
+          "settings": {
+            "show_in_quickbuy": false
+          }
+        },
+        "e8b37bb9-e1cf-4e49-81ab-66e119d8efdf": {
+          "type": "meta-products",
+          "settings": {
+            "option_title": "",
+            "option_title2": "Select stone type:",
+            "option_title3": "Select gemstone type:",
+            "gemstone_type": true,
+            "option_title4": ""
+          }
+        },
+        "variant-picker": {
+          "type": "variant-picker",
+          "settings": {
+            "show_single": false,
+            "select_first_variant": true,
+            "selector_style": "dropdown",
+            "enable_dynamic_availability": true,
+            "enable_size_chart": false,
+            "size_chart_variant": "Size",
+            "size_chart_page": ""
+          }
+        },
+        "d19e32e5-9a40-4299-bb49-d7003cb26813": {
+          "type": "custom_dropdown",
+          "settings": {
+            "page": ""
+          }
+        },
+        "buy-buttons": {
+          "type": "buy-buttons",
+          "settings": {
+            "show_quantity_selector": true,
+            "enable_payment_button": true,
+            "show_backorder_text": false,
+            "show_pickup_availability": true,
+            "show_gift_card_recipient": false
+          }
+        },
+        "8db54dd6-77b5-4e14-b5b5-54af280b0ef2": {
+          "type": "divider",
+          "disabled": true,
+          "settings": {
+            "show_in_quickbuy": false
+          }
+        },
+        "895781fc-52e8-406b-ae26-b66c64db9aba": {
+          "type": "accordion",
+          "settings": {
+            "title": "Details",
+            "icon": "",
+            "content": "{{ product.metafields.custom.details_collapsible | metafield_tag }}",
+            "page": "",
+            "open": true,
+            "show_in_quickbuy": false
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "show_in_tab": true,
+            "open_tab": false,
+            "icon": "",
+            "show_in_quickbuy": false
+          }
+        },
+        "2b174447-5ae7-4266-9268-d665ab727681": {
+          "type": "accordion",
+          "settings": {
+            "title": "Materials",
+            "icon": "",
+            "content": "{{ product.metafields.custom.materials_collapsable | metafield_tag }}",
+            "page": "",
+            "open": false,
+            "show_in_quickbuy": false
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "price",
+        "vendor",
+        "divider",
+        "e8b37bb9-e1cf-4e49-81ab-66e119d8efdf",
+        "variant-picker",
+        "d19e32e5-9a40-4299-bb49-d7003cb26813",
+        "buy-buttons",
+        "8db54dd6-77b5-4e14-b5b5-54af280b0ef2",
+        "895781fc-52e8-406b-ae26-b66c64db9aba",
+        "description",
+        "2b174447-5ae7-4266-9268-d665ab727681"
+      ],
+      "settings": {
+        "show_breadcrumbs": false,
+        "show_location_underneath": false,
+        "inventory_transfers_enable": true,
+        "enable_sticky_columns": false,
+        "gallery_size": "large",
+        "gallery_layout": "columns-2",
+        "enable_zoom": true,
+        "show_alt_text": false,
+        "alt_text_icon": "",
+        "enable_video_autoplay": true,
+        "enable_video_looping": true,
+        "enable_media_grouping": false,
+        "media_grouping_option": "Color,Colour,Couleur,Farbe"
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "title": "You may also like",
+        "show_vendor": false,
+        "grid": 4
+      }
+    }
+  },
+  "order": [
+    "main",
+    "related-products"
+  ]
+}

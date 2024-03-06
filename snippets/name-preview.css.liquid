@@ -1,0 +1,154 @@
+<style>
+/** @format */
+/* Define custom fonts */
+@font-face {
+	font-family: "Khash Medium";
+	src: url({{"1681778779509-A Khash Medium.ttf" | asset_url}}) format('TrueType');
+}
+
+@font-face {
+	font-family: "Aisha Arabic Extrabold";
+	src: url({{"1681778779509-Aisha Arabic Extrabold.ttf" | asset_url}}) format('TrueType');
+}
+
+@font-face {
+	font-family: "Rajon_Shoily";
+	src: url({{"1681778779522-Rajon_Shoily.ttf" | asset_url}}) format('TrueType');
+}
+
+@font-face {
+	font-family: "Mangal Regular";
+	src: url({{"1681778779524-Mangal Regular.ttf" | asset_url}}) format('TrueType');
+}
+
+@font-face {
+	font-family: "18 Khebrat Musamim Regular";
+	src: url({{"18 Khebrat Musamim Regular.ttf" | asset_url}}) format('TrueType');
+}
+
+
+@font-face {
+	font-family: "ARAB3 - 0 Titr Bold Bold";
+	src: url("https://cdn.shopify.com/s/files/1/0668/6169/5296/files/ARAB3-0_Titr_Bold_Bold.ttf") format('TrueType');
+}
+
+@font-face {
+	font-family: "ARAB4 - AAAGoldenLotus Stg1_Ver1 Regular";
+	src: url("https://cdn.shopify.com/s/files/1/0668/6169/5296/files/ARAB4-AAAGoldenLotus_Stg1_Ver1_Regular.ttf") format('TrueType');
+}
+
+@font-face {
+	font-family: "ARAB5-A Arghavan Bold";
+	src: url("https://cdn.shopify.com/s/files/1/0668/6169/5296/files/ARAB5-A_Arghavan_Bold.ttf") format('TrueType');
+}
+
+@font-face {
+	font-family: "ARAB6-(A) Arslan Wessam B (A) Arslan Wessam B";
+	src: url("https://cdn.shopify.com/s/files/1/0668/6169/5296/files/ARAB6-_A_Arslan_Wessam_B_A_Arslan_Wessam_B.ttf") format('TrueType');
+}
+
+@font-face {
+	font-family: "ARAB7-Abdo Free Regular";
+	src: url("https://cdn.shopify.com/s/files/1/0668/6169/5296/files/ARAB7-Abdo_Free_Regular.ttf") format('TrueType');
+}
+
+@font-face {
+	font-family: "ARAB8-AbdoMaster-Bold";
+	src: url("https://cdn.shopify.com/s/files/1/0668/6169/5296/files/ARAB8-AbdoMaster-Bold.ttf") format('TrueType');
+}
+
+@font-face {
+	font-family: "ARAB9-Abdo Joody Bold";
+	src: url("https://cdn.shopify.com/s/files/1/0668/6169/5296/files/ARAB9-Abdo_Joody_Bold.ttf") format('TrueType');
+}
+
+@font-face {
+	font-family: "ARAB10-Abdoullah Ashgar EL-kharef Regular";
+	src: url("https://cdn.shopify.com/s/files/1/0668/6169/5296/files/ARAB10-Abdoullah_Ashgar_EL-kharef_Regular.ttf") format('TrueType');
+}
+
+@font-face {
+	font-family: "ARAB11-abo2sadam Regular";
+	src: url("https://cdn.shopify.com/s/files/1/0668/6169/5296/files/ARAB11-abo2sadam_Regular.ttf") format('TrueType');
+}
+
+@font-face {
+	font-family: "Li_Alinur_Prottoyoee_ANSI_V2";
+	src: url("https://cdn.shopify.com/s/files/1/0668/6169/5296/files/Li_Alinur_Prottoyoee_ANSI_V2.ttf") format('TrueType');
+}
+
+@font-face {
+	font-family: "Li_Fazlay_Munnisha_ANSI_V1";
+	src: url("https://cdn.shopify.com/s/files/1/0668/6169/5296/files/Li_Fazlay_Munnisha_ANSI_V1.ttf") format('TrueType');
+}
+
+@font-face {
+	font-family: "Li_Alinur_Smaroklipi_Unicode";
+	src: url("https://cdn.shopify.com/s/files/1/0668/6169/5296/files/Li_Alinur_Smaroklipi_Unicode.ttf") format('TrueType');
+}
+
+@font-face {
+	font-family: "Li_Fazlay_Munnisha_Mattra_Unicode_Mattra_UNI";
+	src: url("https://cdn.shopify.com/s/files/1/0668/6169/5296/files/Li_Fazlay_Munnisha_Mattra_Unicode_Mattra_UNI.ttf") format('TrueType');
+}
+
+
+@font-face {
+	font-family: "Antonella_script_Regular";
+	src: url("https://cdn.shopify.com/s/files/1/0668/6169/5296/files/Antonella_script_Regular.ttf") format('TrueType');
+}
+
+/**
+ end import custom fonts
+ */
+
+name-preview {
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+	align-items: center;
+}
+
+name-preview .name-input {
+	position: relative;
+	width: 60%;
+	border: 1px solid #d1d1d1;
+	height: 45px;
+	display: flex;
+	padding: 10px 30px 10px 10px;
+	justify-content: space-between;
+}
+/* name-preview .name-input input {
+	padding: 10px;
+} */
+name-preview .name-input span {
+	position: absolute;
+	right: 10px;
+	font-size: 14px
+}
+
+name-preview .name-input input {
+	width: 100%;
+	all: unset;
+	background-color: inherit;
+	border: 0;
+}
+
+name-preview .name-input input:focus-visible {
+	border: 0 !important;
+	box-shadow: none !important;
+}
+
+name-preview .name-preview {
+	width: 40%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #af8832;
+	font-size: 28px;
+}
+
+name-preview input{
+	--input-border-color-hover: none;
+}
+</style>

@@ -1,0 +1,127 @@
+{%- liquid
+  assign popups = section.blocks | where: 'type', 'pop-up'
+  assign show_size_chart = false
+  assign size_chart_block = section.blocks | where: 'type', 'variant-picker' | first
+  if size_chart_block and size_chart_block.settings.enable_size_chart and size_chart_block.settings.size_chart_page != blank
+    assign show_size_chart = true
+  endif
+-%}
+
+{%- for block in popups -%}
+  <modal-dialog class="modal modal--for-product fixed top-0 left-0 w-full h-full flex items-center justify-center" id="modal-{{ block.id }}" role="dialog" aria-label="{{ block.settings.link_text | escape }}" aria-modal="true" tabindex="-1" {{ block.shopify_attributes }}>
+    <div class="modal__window relative bg-theme-bg text-theme-text text-start overflow-hidden has-motion">
+      <button type="button" class="modal__close-btn absolute js-close-modal">
+        {% render 'icon-close' %}
+        <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+      </button>
+      <div class="modal__content flex-auto h-full rte">
+        {{ block.settings.page.content }}
+      </div>
+    </div>
+  </modal-dialog>
+{%- endfor -%}
+
+{%- for block in section.blocks -%}
+  {% case block.type %}
+    {% when 'custom_dropdown' %}
+      
+      <modal-dialog class="modal modal--for-product fixed top-0 left-0 w-full h-full flex items-center justify-center" id="modal-personalization_choose-your-initials" role="dialog" aria-label="{{ 'Font Guide' }}" aria-modal="true" tabindex="-1" {{ block.shopify_attributes }}>
+        <div class="modal__window relative bg-theme-bg text-theme-text text-start overflow-hidden has-motion">
+          <button type="button" class="modal__close-btn absolute js-close-modal">
+            {% render 'icon-close' %}
+            <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+          </button>
+          <div class="modal__content flex-auto h-full rte">
+            <h2 class="h2">Font Guide</h2>
+            <div class="font-container">
+              {% liquid
+                assign alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' | split: ''
+              %}
+              <ul>
+                {% for alphabet in alphabets %}
+                  <li>
+                    {{ alphabet }}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </modal-dialog>
+
+      <modal-dialog class="modal modal--for-product fixed top-0 left-0 w-full h-full flex items-center justify-center" id="modal-personalization_chain-length" role="dialog" aria-label="{{ 'Font Guide' }}" aria-modal="true" tabindex="-1" {{ block.shopify_attributes }}>
+        <div class="modal__window relative bg-theme-bg text-theme-text text-start overflow-hidden has-motion">
+          <button type="button" class="modal__close-btn absolute js-close-modal">
+            {% render 'icon-close' %}
+            <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+          </button>
+          <div class="modal__content flex-auto h-full rte">
+            {% assign page = pages[block.settings.page] %}
+            <h2 class="h3">{{ page.title }}</h2>
+            <div class="rte">{{ page.content }}</div>
+          </div>
+        </div>
+      </modal-dialog>
+
+      <modal-dialog class="modal modal--for-product fixed top-0 left-0 w-full h-full flex items-center justify-center" id="incription_guide" role="dialog" aria-label="{{ 'Font Guide' }}" aria-modal="true" tabindex="-1" {{ block.shopify_attributes }}>
+        <div class="modal__window relative bg-theme-bg text-theme-text text-start overflow-hidden has-motion">
+          <button type="button" class="modal__close-btn absolute js-close-modal">
+            {% render 'icon-close' %}
+            <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+          </button>
+          <div class="modal__content flex-auto h-full rte">
+            <h2>INSCRIPTION GUIDE - BELLE NAME NECKLACE</h2>
+            <div class="rte">
+              <ul>
+                <li>Write up to ten letters.</li>
+                <li>The first letter will be capitalized by default, while the rest will be in lowercase.</li>
+                <li>Make sure to double check your spelling!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </modal-dialog>
+
+      <modal-dialog class="modal modal--for-product fixed top-0 left-0 w-full h-full flex items-center justify-center" id="modal-personalization_ring-size" role="dialog" aria-label="{{ 'Font Guide' }}" aria-modal="true" tabindex="-1" {{ block.shopify_attributes }}>
+        <div class="modal__window relative bg-theme-bg text-theme-text text-start overflow-hidden has-motion">
+          <button type="button" class="modal__close-btn absolute js-close-modal">
+            {% render 'icon-close' %}
+            <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+          </button>
+          <div class="modal__content flex-auto h-full rte">
+            {% assign page = pages[block.settings.page] %}
+            <h2 class="h3">{{ page.title }}</h2>
+            <div class="rte">{{ page.content }}</div>
+          </div>
+        </div>
+      </modal-dialog>
+
+      <modal-dialog class="modal modal--for-product fixed top-0 left-0 w-full h-full flex items-center justify-center" id="modal-personalization_stone_guide" role="dialog" aria-label="{{ 'Font Guide' }}" aria-modal="true" tabindex="-1" {{ block.shopify_attributes }}>
+        <div class="modal__window relative bg-theme-bg text-theme-text text-start overflow-hidden has-motion">
+          <button type="button" class="modal__close-btn absolute js-close-modal">
+            {% render 'icon-close' %}
+            <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+          </button>
+          <div class="modal__content flex-auto h-full rte">
+            {% assign page = pages[block.settings.page] %}
+            <h2 class="h3">{{ page.title }}</h2>
+            <div class="rte">{{ page.content }}</div>
+          </div>
+        </div>
+      </modal-dialog>
+  {% endcase %}
+{%- endfor -%}
+
+{%- if show_size_chart -%}
+  <modal-dialog class="modal modal--for-product invisible fixed top-0 left-0 w-full h-full flex items-center justify-center" id="size-chart-{{ product.id }}-{{ section.id }}"  role="dialog" aria-label="{{ pages[size_chart_block.settings.size_chart_page].title | escape }}" aria-modal="true" tabindex="-1">
+    <div class="modal__window relative bg-theme-bg text-theme-text text-start overflow-hidden has-motion">
+      <button type="button" class="modal__close-btn absolute js-close-modal">
+        {% render 'icon-close' %}
+        <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+      </button>
+      <div class="modal__content flex-auto h-full rte">
+        {{ pages[size_chart_block.settings.size_chart_page].content }}
+      </div>
+    </div>
+  </modal-dialog>
+{%- endif -%}

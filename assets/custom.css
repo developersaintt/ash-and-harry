@@ -1,0 +1,317 @@
+/* metaobject */
+
+.metaobject--parent .metaobject--container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.metaobject--parent .metaobject--price,
+.metaobject--parent .metaobject-title {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+.metaobject--parent .swiper-buttons--wrapper div {
+  cursor: pointer;
+}
+.metaobject--parent ._2YqGK._1z4iY {
+  height: 35px;
+}
+.metaobject--parent .gemstone_type-swiper-button-next:after,
+.metaobject--parent .gemstone_type-swiper-button-prev:after,
+.metaobject--parent .stone_type-swiper-button-next:after,
+.metaobject--parent .stone_type-swiper-button-prev:after,
+.metaobject--parent .materials-swiper-button-next:after,
+.metaobject--parent .materials-swiper-button-prev:after,
+.metaobject--parent .diamond_sizes-swiper-button-next:after,
+.metaobject--parent .diamond_sizes-swiper-button-prev:after {
+  display: none;
+}
+.metaobject--parent .gemstone_type-swiper-button-prev,
+.metaobject--parent .stone_type-swiper-button-prev,
+.metaobject--parent .materials-swiper-button-prev,
+.metaobject--parent .diamond_sizes-swiper-button-prev {
+  transform: rotate(180deg);
+}
+.metaobject--parent {
+  margin-top: 1rem;
+}
+.metaobject--parent .selected--product {
+  outline: 1px solid #000 !important;
+  background: #f7f7f7;
+}
+.metaobject--parent .option--title {
+  font-size: 14px;
+  font-weight: 400;
+}
+.metaobject--parent .metaobject--container {
+  padding: 10px;
+}
+.metaobjects-block .metaobject--parent:first-child {
+  margin-top: 0;
+}
+
+.metaobject--parent .swiper-slide {
+  height: auto;
+  outline: 1px solid #f7f7f7;
+  border-radius: 0.4rem;
+  outline-offset: -1px;
+}
+.metaobject--parent .swiper-button-next,
+.metaobject--parent .swiper-button-prev {
+  height: 15px;
+  width: 10px;
+  position: unset;
+}
+
+.metaobject--parent .image--wrapper img {
+  width: 30px;
+  border-radius: 50%;
+}
+.metaobject--parent .swiper-buttons--wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  column-gap: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.metaobject--parent .swiper-slide:not(.selected--product) {
+  cursor: pointer;
+}
+
+.swiper.diamond_sizes-slider,
+.swiper.gemstone_type--slider,
+.swiper.stone_type--slider,
+.swiper.materials--slider {
+  padding: 1px 0;
+}
+
+.gemstone_type--grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+/* Product Card */
+.product-card__materials-list {
+  display: flex;
+  gap: 8px;
+}
+.product-card__materials-list-image {
+  max-width: 16px;
+}
+
+.product-card__materials-list img {
+  outline: 1px solid rgba(0, 0, 0, 0.6);
+  border-radius: 100px;
+  cursor: pointer;
+}
+.product-card__materials-list-image--active img {
+  padding: 2px;
+}
+
+cc-cart-cross-sell .product-card__materials-list,
+.main-search__results .product-card__materials-list {
+  display: none;
+}
+
+.gemstone_type__item.selected--product {
+  /* border-radius: 9px; */
+  border-radius: 0.4rem;
+}
+
+.metaobject--parent .gemstone_type__item:hover,
+.metaobject-flex--container .swiper-slide:hover {
+  background: #f7f7f7;
+}
+.metaobject--parent .gemstone_type__item {
+  outline: 1px solid #f7f7f7;
+  border-radius: 0.4rem;
+  outline-offset: -1px;
+  cursor: pointer;
+}
+
+/* main-product */
+
+.scroll-hidden {
+  overflow: hidden !important;
+}
+.product-form .option-selector .label {
+  font-size: 14px;
+}
+.custom_dropdown-block {
+  margin-top: 20px;
+}
+.custom-name-box-wrapper {
+  margin-bottom: 20px;
+}
+.product-form .label.popup_label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.product-form .label.popup_label .lightly-spaced-row {
+  margin-bottom: 0;
+}
+.product-form .label.popup_label button.btn {
+  padding: 0;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: capitalize;
+  background: #fff;
+  color: #000;
+  border: 0;
+  text-decoration: underline !important;
+}
+
+.size_guide-popup.active:after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 600;
+}
+.size_guide-popup .size_guide-popup-container {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  overflow: auto;
+  z-index: 1000;
+  width: 100%;
+  height: fit-content;
+  max-width: 600px;
+  max-height: 600px;
+}
+.size_guide-popup .size_guide-popup-container .size-guide_wrapper {
+  padding: 20px;
+  position: relative;
+}
+.size_guide-popup-container .size-guide_wrapper .size_guide-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+}
+.size_guide-popup.active .size_guide-popup-container {
+  display: block;
+}
+.product-form custom-select .label {
+  font-size: 14px;
+}
+.product-form custom-select button,
+.product-form custom-select ul li {
+  font-size: 14px;
+}
+.font-container ul {
+  display: flex;
+  gap: 0px 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px 80px;
+  background: #f2f2f2;
+  list-style-type: none;
+  margin: 0 !important;
+}
+.font-container ul li {
+  font-size: 70px;
+  font-weight: 600;
+  color: #000;
+  list-style: none !important;
+}
+
+/* meta-gemstone_selector */
+
+.meta-gemstone_selector button span.text-start {
+  flex: 1 1 auto;
+}
+.meta-gemstone_selector .metaobject-title {
+  margin: 0;
+  line-height: 1.3;
+  font-size: 14px;
+}
+.meta-gemstone_selector button .metaobject--container.gemstone_type__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.meta-gemstone_selector ul.custom-select__listbox {
+  display: grid !important;
+  grid-template-columns: repeat(4, calc(25% - 10px));
+  gap: 10px;
+  text-align: center;
+  padding: 20px;
+}
+.meta-gemstone_selector ul.custom-select__listbox li {
+  padding: 10px;
+  font-size: 18px;
+  justify-content: center;
+  align-items: start;
+}
+.meta-gemstone_selector ul.custom-select__listbox li .gemstone_type__item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.meta-gemstone_selector .image--wrapper {
+  max-width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* custom-name-box */
+
+.custom-name-box-wrapper label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.custom-name-box-wrapper label p {
+  flex: 1 1 auto;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0;
+}
+.custom-name-box-wrapper label p span {
+  font-weight: 400;
+  font-size: 11px;
+}
+.custom-name-box-wrapper label .lightly-spaced-row {
+  margin-bottom: 0;
+}
+.custom-name-box-wrapper label button {
+  padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: capitalize;
+  background: #fff;
+  color: #000;
+  border: 0;
+  text-decoration: underline !important;
+}
+.custom-name-box-wrapper label button:hover {
+  background-color: transparent;
+  color: black;
+}
+
+template-initials,
+template-ring-size,
+template-name-preview,
+template-gemstone-type {
+  display: none;
+}
+
+[inejcted-fields-placeholder] .custom-name-box-wrapper modal-opener {
+  display: none;
+}

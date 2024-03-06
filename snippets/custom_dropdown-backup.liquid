@@ -1,0 +1,619 @@
+<script src="{{ 'custom-select.js' | asset_url }}" defer></script>
+
+{% liquid
+  assign languages = 'English,Urdu,Chinese,Japanese,Korean,Russian,Arabic'
+  assign languages = languages | split: ','
+
+  assign input_id = 'Choose Language' | handle | prepend: 'personalization_'
+  assign input_name = 'Choose Language' | handle | prepend: 'personalization[' | append: ']'
+
+  assign name_preview_max_length = 9
+  if product.metafields.font.max_length.value != blank
+    assign name_preview_max_length = product.metafields.font.max_length.value
+  endif
+
+  assign name_preview_color = section.settings.custom_font_color
+  if name_preview_color == blank
+    assign name_preview_color = '#edc300'
+  endif
+  assign name_preview_font_family = product.metafields.font.font_family.value
+
+  assign name_preview_font_size = 24
+
+  assign personalization_option = product.metafields.custom.product_personalization_options | handleize
+-%}
+<div class="option-selector" data-selector-type="dropdown">
+  {% render 'custom-select-2',
+    id: input_id,
+    label: 'Choose Language',
+    option_values: languages,
+    selected_value: languages.first,
+    include_native: true,
+    native_name: input_name,
+    block: block
+  %}
+</div>
+
+{% capture intials_dropdown %}
+    {% liquid
+      assign alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    
+      assign custom_options = alphabets | split: ''
+      assign input_id = 'Choose your Initials' | handle | prepend: 'personalization_'
+      assign input_name = 'Choose your Initials' | handle | prepend: 'personalization[' | append: ']'
+    -%}
+    <div class="option-selector" data-selector-type="dropdown">
+      {% render 'custom-select-2',
+        id: input_id,
+        label: 'Choose your Initials',
+        option_values: custom_options,
+        selected_value: custom_options.first,
+        include_native: true,
+        native_name: input_name,
+        button_text: 'Font Guide',
+        model_id: 'modal-personalization_choose-your-initials',
+        size_guide: true
+      %}
+    </div>
+{% endcapture %}
+
+{% if personalization_option == 'single-initial' %}
+  {{ intials_dropdown }}
+{% elsif personalization_option == 'single-initial-single-gemstone' %}
+  {{ intials_dropdown }}
+
+  {%- capture meta_object -%}
+        {% for metaobject in product.metafields.custom.gemstone_type.value %}
+            {% liquid
+            assign active_products = metaobject.active_products.value
+            assign is_active = false
+
+            for active_product in active_products
+                if active_product.id == product.id
+                assign is_active = true
+                endif
+            endfor
+            %}
+            <div class="metaobject--container gemstone_type__item {% if is_active %}selected--product{% endif %}" data-title="{{metaobject.title}}">
+                <div class="image--wrapper">
+                    <img src="{{ metaobject.image | img_url : 'master' }}">
+                </div>
+                <p class="metaobject-title">{{ metaobject.title }}</p>
+            </div> New Item
+        {% endfor %}
+    {%- endcapture -%}
+
+  {%- liquid
+    assign custom_options = meta_object | split: 'New Item'
+    assign input_id = 'Select gemstone type:' | handle | prepend: 'personalization_'
+    assign input_name = 'Select gemstone type:' | handle | prepend: 'personalization[' | append: ']'
+  -%}
+  <div class="option-selector meta-gemstone_selector" data-selector-type="dropdown">
+    {% render 'gemstone-type-select',
+      id: input_id,
+      label: 'Select gemstone type:',
+      option_values: custom_options,
+      selected_value: custom_options.first,
+      include_native: true,
+      native_name: input_name,
+      button_text: 'Size Guide',
+      model_id: 'modal-personalization_chain-length',
+      size_guide: false
+    %}
+  </div>
+
+{% elsif personalization_option == 'single-initial-single-size' %}
+  {% liquid
+    assign alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+    assign custom_options = alphabets | split: ''
+    assign input_id = 'Choose your letter:' | handle | prepend: 'personalization_'
+    assign input_name = 'Choose your letter:' | handle | prepend: 'personalization[' | append: ']'
+  -%}
+  <div class="option-selector" data-selector-type="dropdown">
+    {% render 'custom-select-2',
+      id: input_id,
+      label: 'Choose your letter:',
+      option_values: custom_options,
+      selected_value: custom_options.first,
+      include_native: true,
+      native_name: input_name,
+      button_text: 'Font Guide',
+      model_id: 'modal-personalization_choose-your-initials',
+      size_guide: true
+    %}
+  </div>
+
+  {% liquid
+    assign sizes = '5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,10.5'
+
+    assign custom_options = sizes | split: ','
+    assign input_id = 'Select your ring size:' | handle | prepend: 'personalization_'
+    assign input_name = 'Select your ring size:' | handle | prepend: 'personalization[' | append: ']'
+  -%}
+  <div class="option-selector" data-selector-type="dropdown">
+    {% render 'custom-select-2',
+      id: input_id,
+      label: 'Select your ring size:',
+      option_values: custom_options,
+      selected_value: custom_options.first,
+      include_native: true,
+      native_name: input_name,
+      button_text: 'Size Guide',
+      model_id: 'modal-personalization_ring-size',
+      size_guide: true
+    %}
+  </div>
+
+{% elsif personalization_option == 'multiple-initials-multiple-sizes' %}
+  {% liquid
+    assign alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+    assign custom_options = alphabets | split: ''
+    assign input_id = '1st initial:' | handle | prepend: 'personalization_'
+    assign input_name = '1st initial:' | handle | prepend: 'personalization[' | append: ']'
+  -%}
+  <div class="option-selector" data-selector-type="dropdown">
+    {% render 'custom-select-2',
+      id: input_id,
+      label: '1st initial:',
+      option_values: custom_options,
+      selected_value: custom_options.first,
+      include_native: true,
+      native_name: input_name,
+      button_text: 'Font Guide',
+      model_id: 'modal-personalization_choose-your-initials',
+      size_guide: true
+    %}
+  </div>
+
+  {% liquid
+    assign sizes = '4,5,6,7,8,9,10,11'
+
+    assign custom_options = sizes | split: ','
+    assign input_id = '1st ring size:' | handle | prepend: 'personalization_'
+    assign input_name = '1st ring size:' | handle | prepend: 'personalization[' | append: ']'
+  -%}
+  <div class="option-selector" data-selector-type="dropdown">
+    {% render 'custom-select-2',
+      id: input_id,
+      label: '1st ring size:',
+      option_values: custom_options,
+      selected_value: custom_options.first,
+      include_native: true,
+      native_name: input_name,
+      button_text: 'Size Guide',
+      model_id: 'modal-personalization_ring-size',
+      size_guide: true
+    %}
+  </div>
+
+{% elsif personalization_option == 'single-name-single-gemstone' %}
+  {%- capture meta_object -%}
+        {% for metaobject in product.metafields.custom.gemstone_type.value %}
+            {% liquid
+            assign active_products = metaobject.active_products.value
+            assign is_active = false
+
+            for active_product in active_products
+                if active_product.id == product.id
+                assign is_active = true
+                endif
+            endfor
+            %}
+            <div class="metaobject--container gemstone_type__item {% if is_active %}selected--product{% endif %}" data-title="{{metaobject.title}}">
+                <div class="image--wrapper">
+                    <img src="{{ metaobject.image | img_url : 'master' }}">
+                </div>
+                <p class="metaobject-title">{{ metaobject.title }}</p>
+            </div> New Item
+        {% endfor %}
+    {%- endcapture -%}
+
+  {%- liquid
+    assign custom_options = meta_object | split: 'New Item'
+    assign input_id = 'Select gemstone type:' | handle | prepend: 'personalization_'
+    assign input_name = 'Select gemstone type:' | handle | prepend: 'personalization[' | append: ']'
+  -%}
+  <div class="option-selector meta-gemstone_selector" data-selector-type="dropdown">
+    {% render 'gemstone-type-select',
+      id: input_id,
+      label: 'Select gemstone type:',
+      option_values: custom_options,
+      selected_value: custom_options.first,
+      include_native: true,
+      native_name: input_name,
+      button_text: 'Size Guide',
+      model_id: 'modal-personalization_chain-length',
+      size_guide: false
+    %}
+  </div>
+
+  <div class="custom-name-box-wrapper">
+    <label>
+      <p>Write up to 10 characters:</p>
+      <div
+        class="lightly-spaced-row{% unless block.settings.show_in_quickbuy %} not-in-quickbuy{% endunless %}"
+        {{ block.shopify_attributes }}
+      >
+        <modal-opener class="no-js-hidden" data-modal="{{ 'incription_guide' }}">
+          <button
+            type="button"
+            class="{% if block.settings.style != 'link' %}btn btn--{{ block.settings.style }}{% else %}small-feature-link{% endif %}"
+            aria-haspopup="dialog"
+          >
+            {{- 'Inscription guide' -}}
+          </button>
+        </modal-opener>
+      </div>
+    </label>
+    <name-preview>
+      <div class="name-input">
+        <input
+          type="text"
+          name="Custom Name"
+          maxlength="{{ name_preview_max_length }}"
+        >
+        <span class="name-length"></span>
+      </div>
+      <div
+        class="name-preview"
+        style="font-family:'{{name_preview_font_family}}'; font-size:{{name_preview_font_size}}px; color:{{name_preview_color}};"
+      ></div>
+    </name-preview>
+  </div>
+
+{% elsif personalization_option == 'multiple-name-single-gemstone' %}
+  {%- capture meta_object -%}
+        {% for metaobject in product.metafields.custom.gemstone_type.value %}
+            {% liquid
+            assign active_products = metaobject.active_products.value
+            assign is_active = false
+
+            for active_product in active_products
+                if active_product.id == product.id
+                assign is_active = true
+                endif
+            endfor
+            %}
+            <div class="metaobject--container gemstone_type__item {% if is_active %}selected--product{% endif %}" data-title="{{metaobject.title}}">
+                <div class="image--wrapper">
+                    <img src="{{ metaobject.image | img_url : 'master' }}">
+                </div>
+                <p class="metaobject-title">{{ metaobject.title }}</p>
+            </div> New Item
+        {% endfor %}
+    {%- endcapture -%}
+
+  {%- liquid
+    assign custom_options = meta_object | split: 'New Item'
+    assign input_id = 'Select gemstone type:' | handle | prepend: 'personalization_'
+    assign input_name = 'Select gemstone type:' | handle | prepend: 'personalization[' | append: ']'
+  -%}
+  <div class="option-selector meta-gemstone_selector" data-selector-type="dropdown">
+    {% render 'gemstone-type-select',
+      id: input_id,
+      label: 'Select gemstone type:',
+      option_values: custom_options,
+      selected_value: custom_options.first,
+      include_native: true,
+      native_name: input_name,
+      button_text: 'Size Guide',
+      model_id: 'modal-personalization_chain-length',
+      size_guide: false
+    %}
+  </div>
+
+  <div class="custom-name-box-wrapper">
+    <label>
+      <p>1st inscription <span>(Up to 10 characters):</span></p>
+      <div
+        class="lightly-spaced-row{% unless block.settings.show_in_quickbuy %} not-in-quickbuy{% endunless %}"
+        {{ block.shopify_attributes }}
+      >
+        <modal-opener class="no-js-hidden" data-modal="{{ 'incription_guide' }}">
+          <button
+            type="button"
+            class="{% if block.settings.style != 'link' %}btn btn--{{ block.settings.style }}{% else %}small-feature-link{% endif %}"
+            aria-haspopup="dialog"
+          >
+            {{- 'Inscription guide' -}}
+          </button>
+        </modal-opener>
+      </div>
+    </label>
+    <name-preview>
+      <div class="name-input">
+        <input
+          type="text"
+          name="Custom Name"
+          maxlength="{{ name_preview_max_length }}"
+        >
+        <span class="name-length"></span>
+      </div>
+      <div
+        class="name-preview"
+        style="font-family:'{{name_preview_font_family}}'; font-size:{{name_preview_font_size}}px; color:{{name_preview_color}};"
+      ></div>
+    </name-preview>
+  </div>
+
+{% elsif personalization_option == 'multiple-name-multiple-gemstone' %}
+  <div class="custom-name-box-wrapper">
+    <label>
+      <p>1st inscription <span>(Up to 10 characters):</span></p>
+      <div
+        class="lightly-spaced-row{% unless block.settings.show_in_quickbuy %} not-in-quickbuy{% endunless %}"
+        {{ block.shopify_attributes }}
+      >
+        <modal-opener class="no-js-hidden" data-modal="{{ 'incription_guide' }}">
+          <button
+            type="button"
+            class="{% if block.settings.style != 'link' %}btn btn--{{ block.settings.style }}{% else %}small-feature-link{% endif %}"
+            aria-haspopup="dialog"
+          >
+            {{- 'Inscription guide' -}}
+          </button>
+        </modal-opener>
+      </div>
+    </label>
+    <name-preview>
+      <div class="name-input">
+        <input
+          type="text"
+          name="Custom Name"
+          maxlength="{{ name_preview_max_length }}"
+        >
+        <span class="name-length"></span>
+      </div>
+      <div
+        class="name-preview"
+        style="font-family:'{{name_preview_font_family}}'; font-size:{{name_preview_font_size}}px; color:{{name_preview_color}};"
+      ></div>
+    </name-preview>
+  </div>
+
+  {%- capture meta_object -%}
+        {% for metaobject in product.metafields.custom.gemstone_type.value %}
+            {% liquid
+            assign active_products = metaobject.active_products.value
+            assign is_active = false
+
+            for active_product in active_products
+                if active_product.id == product.id
+                assign is_active = true
+                endif
+            endfor
+            %}
+            <div class="metaobject--container gemstone_type__item {% if is_active %}selected--product{% endif %}" data-title="{{metaobject.title}}">
+                <div class="image--wrapper">
+                    <img src="{{ metaobject.image | img_url : 'master' }}">
+                </div>
+                <p class="metaobject-title">{{ metaobject.title }}</p>
+            </div> New Item
+        {% endfor %}
+    {%- endcapture -%}
+
+  {%- liquid
+    assign custom_options = meta_object | split: 'New Item'
+    assign input_id = '1st Birthstone:' | handle | prepend: 'personalization_'
+    assign input_name = '1st Birthstone:' | handle | prepend: 'personalization[' | append: ']'
+  -%}
+  <div class="option-selector meta-gemstone_selector" data-selector-type="dropdown">
+    {% render 'gemstone-type-select',
+      id: input_id,
+      label: '1st Birthstone:',
+      option_values: custom_options,
+      selected_value: custom_options.first,
+      include_native: true,
+      native_name: input_name,
+      button_text: 'Size Guide',
+      model_id: 'modal-personalization_chain-length',
+      size_guide: false
+    %}
+  </div>
+
+{% elsif personalization_option == 'two-names-field(left & right)' %}
+  <div class="custom-name-box-wrapper">
+    <label>
+      <p>Left inscription <span>(Up to 10 characters):</span></p>
+      <div
+        class="lightly-spaced-row{% unless block.settings.show_in_quickbuy %} not-in-quickbuy{% endunless %}"
+        {{ block.shopify_attributes }}
+      >
+        <modal-opener class="no-js-hidden" data-modal="{{ 'incription_guide' }}">
+          <button
+            type="button"
+            class="{% if block.settings.style != 'link' %}btn btn--{{ block.settings.style }}{% else %}small-feature-link{% endif %}"
+            aria-haspopup="dialog"
+          >
+            {{- 'Font guide' -}}
+          </button>
+        </modal-opener>
+      </div>
+    </label>
+    <name-preview>
+      <div class="name-input">
+        <input
+          type="text"
+          name="Custom Name"
+          maxlength="{{ name_preview_max_length }}"
+        >
+        <span class="name-length"></span>
+      </div>
+      <div
+        class="name-preview"
+        style="font-family:'{{name_preview_font_family}}'; font-size:{{name_preview_font_size}}px; color:{{name_preview_color}};"
+      ></div>
+    </name-preview>
+  </div>
+
+  <div class="custom-name-box-wrapper">
+    <label>
+      <p>Right inscription <span>(Up to 10 characters):</span></p>
+    </label>
+    <name-preview>
+      <div class="name-input">
+        <input
+          type="text"
+          name="Custom Name"
+          maxlength="{{ name_preview_max_length }}"
+        >
+        <span class="name-length"></span>
+      </div>
+      <div
+        class="name-preview"
+        style="font-family:'{{name_preview_font_family}}'; font-size:{{name_preview_font_size}}px; color:{{name_preview_color}};"
+      ></div>
+    </name-preview>
+  </div>
+
+{% elsif personalization_option == 'two-names-two-gemstones' %}
+  <div class="custom-name-box-wrapper">
+    <label>
+      <p>1st inscription - upper engraving: <span>(Up to 10 characters)</span></p>
+      <div
+        class="lightly-spaced-row{% unless block.settings.show_in_quickbuy %} not-in-quickbuy{% endunless %}"
+        {{ block.shopify_attributes }}
+      >
+        <modal-opener class="no-js-hidden" data-modal="{{ 'incription_guide' }}">
+          <button
+            type="button"
+            class="{% if block.settings.style != 'link' %}btn btn--{{ block.settings.style }}{% else %}small-feature-link{% endif %}"
+            aria-haspopup="dialog"
+          >
+            {{- 'Inscription guide' -}}
+          </button>
+        </modal-opener>
+      </div>
+    </label>
+    <name-preview>
+      <div class="name-input">
+        <input
+          type="text"
+          name="Custom Name"
+          maxlength="{{ name_preview_max_length }}"
+        >
+        <span class="name-length"></span>
+      </div>
+      <div
+        class="name-preview"
+        style="font-family:'{{name_preview_font_family}}'; font-size:{{name_preview_font_size}}px; color:{{name_preview_color}};"
+      ></div>
+    </name-preview>
+  </div>
+
+  {%- capture meta_object -%}
+        {% for metaobject in product.metafields.custom.gemstone_type.value %}
+            {% liquid
+            assign active_products = metaobject.active_products.value
+            assign is_active = false
+
+            for active_product in active_products
+                if active_product.id == product.id
+                assign is_active = true
+                endif
+            endfor
+            %}
+            <div class="metaobject--container gemstone_type__item {% if is_active %}selected--product{% endif %}" data-title="{{metaobject.title}}">
+                <div class="image--wrapper">
+                    <img src="{{ metaobject.image | img_url : 'master' }}">
+                </div>
+                <p class="metaobject-title">{{ metaobject.title }}</p>
+            </div> New Item
+        {% endfor %}
+    {%- endcapture -%}
+
+  {%- liquid
+    assign custom_options = meta_object | split: 'New Item'
+    assign input_id = '1st Birthstone:' | handle | prepend: 'personalization_'
+    assign input_name = '1st Birthstone:' | handle | prepend: 'personalization[' | append: ']'
+  -%}
+  <div class="option-selector meta-gemstone_selector" data-selector-type="dropdown">
+    {% render 'gemstone-type-select',
+      id: input_id,
+      label: '1st Birthstone:',
+      option_values: custom_options,
+      selected_value: custom_options.first,
+      include_native: true,
+      native_name: input_name,
+      button_text: 'Birthstone Guide',
+      model_id: 'modal-personalization_stone_guide',
+      size_guide: true
+    %}
+  </div>
+
+  <div class="custom-name-box-wrapper">
+    <label>
+      <p>2nd inscription - lower engraving:<span>(Up to 10 characters)</span></p>
+      <div
+        class="lightly-spaced-row{% unless block.settings.show_in_quickbuy %} not-in-quickbuy{% endunless %}"
+        {{ block.shopify_attributes }}
+      >
+        <modal-opener class="no-js-hidden" data-modal="{{ 'incription_guide' }}">
+          <button
+            type="button"
+            class="{% if block.settings.style != 'link' %}btn btn--{{ block.settings.style }}{% else %}small-feature-link{% endif %}"
+            aria-haspopup="dialog"
+          >
+            {{- 'Inscription guide' -}}
+          </button>
+        </modal-opener>
+      </div>
+    </label>
+    <name-preview>
+      <div class="name-input">
+        <input
+          type="text"
+          name="Custom Name"
+          maxlength="{{ name_preview_max_length }}"
+        >
+        <span class="name-length"></span>
+      </div>
+      <div
+        class="name-preview"
+        style="font-family:'{{name_preview_font_family}}'; font-size:{{name_preview_font_size}}px; color:{{name_preview_color}};"
+      ></div>
+    </name-preview>
+  </div>
+
+  {%- capture meta_object -%}
+        {% for metaobject in product.metafields.custom.gemstone_type.value %}
+            {% liquid
+            assign active_products = metaobject.active_products.value
+            assign is_active = false
+
+            for active_product in active_products
+                if active_product.id == product.id
+                assign is_active = true
+                endif
+            endfor
+            %}
+            <div class="metaobject--container gemstone_type__item {% if is_active %}selected--product{% endif %}" data-title="{{metaobject.title}}">
+                <div class="image--wrapper">
+                    <img src="{{ metaobject.image | img_url : 'master' }}">
+                </div>
+                <p class="metaobject-title">{{ metaobject.title }}</p>
+            </div> New Item
+        {% endfor %}
+    {%- endcapture -%}
+
+  {%- liquid
+    assign custom_options = meta_object | split: 'New Item'
+    assign input_id = '2nd Birthstone:' | handle | prepend: 'personalization_'
+    assign input_name = '2nd Birthstone:' | handle | prepend: 'personalization[' | append: ']'
+  -%}
+  <div class="option-selector meta-gemstone_selector" data-selector-type="dropdown">
+    {% render 'gemstone-type-select',
+      id: input_id,
+      label: '2nd Birthstone:',
+      option_values: custom_options,
+      selected_value: custom_options.first,
+      include_native: true,
+      native_name: input_name,
+      button_text: 'Size Guide',
+      model_id: 'modal-personalization_chain-length',
+      size_guide: false
+    %}
+  </div>
+{% endif %}

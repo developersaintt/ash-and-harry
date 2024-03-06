@@ -1,0 +1,15 @@
+{% liquid
+  if settings.prod_thumb_shape == 'portrait-23'
+    assign chosen_aspect_ratio = 0.67
+  elsif settings.prod_thumb_shape == 'portrait-45'
+    assign chosen_aspect_ratio = 0.8
+  elsif settings.prod_thumb_shape == 'square'
+    assign chosen_aspect_ratio = 1.0
+  elsif settings.prod_thumb_shape == 'landscape-54'
+    assign chosen_aspect_ratio = 1.25
+  elsif settings.prod_thumb_shape == 'landscape-32'
+    assign chosen_aspect_ratio = 1.50
+  endif
+%}
+
+{% render 'product-block', custom_aspect_ratio: chosen_aspect_ratio %}
